@@ -1,7 +1,7 @@
 <div align="center">
   <br />
     <a href="#" target="_blank">
-      <img src="./nonRelatedAssets/preview.png" alt="Employee Attendance System">
+      <img src="./nonRelatedAssets/preview1.png" alt="Employee Attendance System">
     </a>
   <br />
 
