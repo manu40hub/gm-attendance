@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -65,8 +65,8 @@ function ManagerDashboard() {
 
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/manager/attendance",
+      const { data } = await api.get(
+        "/api/manager/attendance",
         {
           params: { date: dateStr },
           headers: {
@@ -109,8 +109,8 @@ function ManagerDashboard() {
       const month = m.format("MM");
 
       setAnalyticsLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/manager/analytics/monthly",
+      const { data } = await api.get(
+        "/api/manager/analytics/monthly",
         {
           params: { year, month },
           headers: { Authorization: `Bearer ${token}` },
