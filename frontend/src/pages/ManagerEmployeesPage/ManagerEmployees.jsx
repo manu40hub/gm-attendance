@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../apiClient";
+import api from "../../apiClient";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import "./ManagerEmployees.css";
