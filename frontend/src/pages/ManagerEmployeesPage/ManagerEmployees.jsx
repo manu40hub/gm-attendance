@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import "./ManagerEmployees.css";
@@ -24,8 +24,8 @@ function ManagerEmployees() {
 
     const fetchEmployees = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/manager/employees",
+        const { data } = await api.get(
+          "/api/manager/employees",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
