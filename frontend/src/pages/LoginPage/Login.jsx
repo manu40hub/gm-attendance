@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import axios from "../apiClient";
+import api from "../apiClient";
 import { useNavigate, Link } from "react-router-dom";
 import { FaLock } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import "./Login.css";
-api.get("/api/attendance/summary/....");
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
