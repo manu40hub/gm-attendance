@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../apiClient";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import "./Overview.css";
@@ -36,8 +36,8 @@ function Overview() {
 
     const fetchAttendanceSummary = (userId) => {
       setLoading(true);
-      axios
-        .get(`http://localhost:5000/api/attendance/summary/${userId}`, {
+      api
+        .get(`/api/attendance/summary/${userId}`, {
           params: { year: selectedYear, month: selectedMonth },
         })
         .then(({ data }) => {
@@ -53,8 +53,8 @@ function Overview() {
 
     const fetchDailyAttendance = (userId) => {
       setLoading(true);
-      axios
-        .get(`http://localhost:5000/api/attendance/details/${userId}`, {
+      api
+        .get(`/api/attendance/details/${userId}`, {
           params: { year: selectedYear, month: selectedMonth },
         })
         .then(({ data }) => {
@@ -71,8 +71,8 @@ function Overview() {
     };
 
     const fetchToday = () => {
-      axios
-        .get("http://localhost:5000/api/attendance/today", {
+      api
+        .get("/api/attendance/today", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -101,8 +101,8 @@ function Overview() {
 
     try {
       setBtnLoading(true);
-      const { data } = await axios.post(
-        "http://localhost:5000/api/attendance/checkin",
+      const { data } = await api.post(
+        "/api/attendance/checkin",
         {},
         {
           headers: {
@@ -128,8 +128,8 @@ function Overview() {
 
     try {
       setBtnLoading(true);
-      const { data } = await axios.post(
-        "http://localhost:5000/api/attendance/checkout",
+      const { data } = await api.post(
+        "/api/attendance/checkout",
         {},
         {
           headers: {
