@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import "./Profile.css";
 import { useNavigate } from "react-router-dom";
 
@@ -19,8 +19,8 @@ function Profile() {
 
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/user/profile", // ✅ CORRECT ENDPOINT
+      const { data } = await api.get(
+        "/api/user/profile", // ✅ CORRECT ENDPOINT
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -51,8 +51,8 @@ function Profile() {
 
     try {
       setSaving(true);
-      await axios.put(
-        "http://localhost:5000/api/user/profile",
+      await api.put(
+        "/api/user/profile",
         { name },
         {
           headers: { Authorization: `Bearer ${token}` },
