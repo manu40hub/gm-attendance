@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../apiClient";
+import api from "../../apiClient";
 import "./Leave.css";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
