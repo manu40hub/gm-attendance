@@ -150,7 +150,7 @@ cd Employee-Attendance-System-MERN
 ```bash
 PORT=5000
 MONGO_URI=YOUR_MONGO_URI
-JWT_SECRET=tu8861sRFQyXDRH
+JWT_SECRET=YOURSECRETKEY
 ```
 
 **Setup Backend**
