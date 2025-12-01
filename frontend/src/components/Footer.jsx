@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaGithub, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
-import LogoFooter from "../assets/logo.svg";
+import Logo from "../assets/mg.png";
 import "./Footer.css";
 
 const Footer = () => {
@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="footer-section">
           <div className="logo-section">
             <Link to={"/"}>
-              <img src={LogoFooter} alt="LogoFooter" />
+              <img src={Logo} alt="GM Attendance" className="footer-logo" />
             </Link>
           </div>
           <p className="footer-description">

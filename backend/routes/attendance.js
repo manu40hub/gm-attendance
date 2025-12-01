@@ -1,54 +1,175 @@
 const express = require("express");
-const Attendance = require("../models/Attendance");
 const router = express.Router();
+const Attendance = require("../models/Attendance");
 const User = require("../models/User");
+const  auth  = require("../middleware/auth");
 
+// Utility function – get start of day
+function getStartOfDay(date = new Date()) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+/**
+ * -----------------------------------------
+ * EMPLOYEE: TODAY ATTENDANCE STATUS
+ * -----------------------------------------
+ */
+router.get("/today", auth, async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const today = getStartOfDay();
+
+    const attendance = await Attendance.findOne({
+      user: userId,
+      date: today,
+    });
+
+    res.json({ attendance });
+  } catch (err) {
+    console.error("ERR /today:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+/**
+ * -----------------------------------------
+ * EMPLOYEE: CHECK-IN
+ * -----------------------------------------
+ */
+router.post("/checkin", auth, async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const now = new Date();
+    const today = getStartOfDay(now);
+
+    let attendance = await Attendance.findOne({
+      user: userId,
+      date: today,
+    });
+
+    if (attendance && attendance.checkInTime) {
+      return res
+        .status(400)
+        .json({ message: "You have already checked in today." });
+    }
+
+    if (!attendance) {
+      attendance = new Attendance({
+        user: userId,
+        date: today,
+        status: "Present",
+        checkInTime: now,
+        totalHours: 0,
+      });
+    } else {
+      attendance.checkInTime = now;
+      attendance.status = "Present";
+    }
+
+    await attendance.save();
+    res.status(201).json({ message: "Checked in successfully", attendance });
+  } catch (err) {
+    console.error("ERR /checkin:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+/**
+ * -----------------------------------------
+ * EMPLOYEE: CHECK-OUT
+ * -----------------------------------------
+ */
+router.post("/checkout", auth, async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const now = new Date();
+    const today = getStartOfDay(now);
+
+    const attendance = await Attendance.findOne({
+      user: userId,
+      date: today,
+    });
+
+    if (!attendance || !attendance.checkInTime) {
+      return res
+        .status(400)
+        .json({ message: "You have not checked in today." });
+    }
+
+    if (attendance.checkOutTime) {
+      return res
+        .status(400)
+        .json({ message: "You have already checked out today." });
+    }
+
+    attendance.checkOutTime = now;
+
+    const diffMs = attendance.checkOutTime - attendance.checkInTime;
+    const hours = diffMs / (1000 * 60 * 60);
+
+    attendance.totalHours = Number(hours.toFixed(2));
+
+    await attendance.save();
+    res.json({ message: "Checked out successfully", attendance });
+  } catch (err) {
+    console.error("ERR /checkout:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+/**
+ * -----------------------------------------
+ * OLD ATTENDANCE CREATE (ADMIN USE)
+ * -----------------------------------------
+ */
 router.post("/", async (req, res) => {
-  const { userId, status } = req.body;
-  const attendance = new Attendance({ userId, status });
-  await attendance.save();
+  const { userId, status ,date } = req.body;
+  const theDate = date ? getStartOfDay(new Date(date)) : getStartOfDay();
 
+  const attendance = new Attendance({
+    user: userId,
+    status,
+    date: theDate,
+  });
+
+  await attendance.save();
   res.json({ message: "Attendance marked" });
 });
 
-router.get("/:userId", async (req, res) => {
-  const attendance = await Attendance.find({ userId: req.params.userId });
-  res.json(attendance);
-});
-
+/**
+ * -----------------------------------------
+ * USER FULL MONTH SUMMARY
+ * -----------------------------------------
+ */
 router.get("/summary/:userId", async (req, res) => {
-  const { userId } = req.params;
-  const { year, month } = req.query;
-
   try {
+    const { userId } = req.params;
+    const { year, month } = req.query;
+
     if (!year || !month) {
-      return res.status(400).json({ message: "Year and Month are required" });
+      return res.status(400).json({ message: "Year & Month required" });
     }
 
     const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    const startDate = new Date(`${year}-${month}-01`)
-      .toISOString()
-      .slice(0, 10);
-    const endDate = new Date(`${year}-${month}-31`).toISOString().slice(0, 10);
+    const y = parseInt(year, 10);
+    const m = parseInt(month, 10);
 
-    const attendanceRecords = await Attendance.find({
-      userId,
-      date: { $gte: startDate, $lte: endDate },
+    const start = new Date(y,m-1 , 1);
+    const end = new Date(y,m,1);
+    /*end.setMonth(end.getMonth() + 1);*/
+
+    const records = await Attendance.find({
+      user: userId,
+      date: { $gte: start, $lt: end },
     });
 
-    const presentDays = attendanceRecords.filter(
-      (record) => record.status.trim().toLowerCase() === "present"
-    ).length;
-    const absentDays = attendanceRecords.filter(
-      (record) => record.status.trim().toLowerCase() === "absent"
-    ).length;
-    const leaveDays = attendanceRecords.filter(
-      (record) => record.status.trim().toLowerCase() === "leave"
-    ).length;
+    const presentDays = records.filter(r => r.status === "Present").length;
+    const absentDays = records.filter(r => r.status === "Absent").length;
+    const leaveDays = records.filter(r => r.status === "Leave").length;
 
     res.json({
       userName: user.name,
@@ -60,81 +181,40 @@ router.get("/summary/:userId", async (req, res) => {
       leaveDays,
     });
   } catch (err) {
-    console.error("Server Error:", err);
-    res.status(500).json({ message: "Server Error", error: err.message });
+    console.error("ERR /summary:", err);
+    res.status(500).json({ message: "Server Error" });
   }
 });
-//   try {
-//     const { userId } = req.params;
-//     const { year, month } = req.query;
 
-//     console.log(
-//       `Fetching attendance for UserID: ${userId}, Year: ${year}, Month: ${month}`
-//     );
-
-//     if (!userId || !year || !month) {
-//       return res
-//         .status(400)
-//         .json({ error: "Missing required query parameters" });
-//     }
-
-//     const startDate = new Date(`${year}-${month}-01T00:00:00.000Z`);
-//     const endDate = new Date(
-//       `${year}-${(parseInt(month) + 1)
-//         .toString()
-//         .padStart(2, "0")}-01T00:00:00.000Z`
-//     );
-
-//     console.log("Querying MongoDB from:", startDate, "to:", endDate);
-
-//     const records = await Attendance.find({
-//       userId,
-//       date: { $gte: startDate, $lt: endDate },
-//     }).sort({ date: 1 });
-
-//     console.log("Fetched Records:", records);
-
-//     res.json(records);
-//   } catch (error) {
-//     console.error("Server Error Fetching Attendance:", error);
-//     res.status(500).json({ error: "Failed to fetch attendance records" });
-//   }
-// });
-
+/**
+ * -----------------------------------------
+ * USER MONTHLY FULL DETAILS (Daily table)
+ * -----------------------------------------
+ */
 router.get("/details/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const { year, month } = req.query;
+    let { year, month } = req.query;
 
-    if (!userId || !year || !month) {
-      return res
-        .status(400)
-        .json({ error: "Missing required query parameters" });
-    }
+    year = parseInt(year,10);
+    month = parseInt(month,10);
 
-    const y = parseInt(year, 10);
-    const m = parseInt(month, 10);
+    if (!year || !month)
+      return res.status(400).json({ message: "Year & Month required" });
 
-    if (isNaN(y) || isNaN(m) || m < 1 || m > 12) {
-      return res.status(400).json({ error: "Invalid year or month format" });
-    }
-
-    const startDate = `${y}-${String(m).padStart(2, "0")}-01`;
-    const endDate = `${y}-${String(m + 1).padStart(2, "0")}-01`;
-
-    console.log(`Querying MongoDB from: ${startDate} to ${endDate}`);
+    const start = new Date(year,month-1,1);
+    const end = new Date(year,month,1);
+    
 
     const records = await Attendance.find({
-      userId,
-      date: { $gte: startDate, $lt: endDate },
+      user: userId,
+      date: { $gte: start, $lt: end },
     }).sort({ date: 1 });
 
-    console.log("Fetched Records:", records);
-
     res.json(records);
-  } catch (error) {
-    console.error("Server Error Fetching Attendance:", error);
-    res.status(500).json({ error: "Failed to fetch attendance records" });
+  } catch (err) {
+    console.error("ERR /details:", err);
+    res.status(500).json({ message: "Server Error" });
   }
 });
 

@@ -10,12 +10,14 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("employee");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
     event.preventDefault();
 
     try {
+      setLoading(true);
       await axios.post("http://localhost:5000/api/auth/register", {
         name,
         email,
@@ -23,57 +25,92 @@ const Register = () => {
         role,
       });
       alert("Registration Successful!");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
-      alert("Registration Failed: " + error.response.data.message);
+      alert(
+        "Registration Failed: " + (error.response?.data?.message || "Try again")
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <div className="wrapper">
-        <form onSubmit={handleRegister}>
-          <h2>Register</h2>
-          <div className="input-box">
-            <input
-              type="text"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <FaUser className="icon" />
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2 className="auth-title">Register</h2>
+        <p className="auth-subtitle">
+          Create your account to access the portal.
+        </p>
+
+        <form onSubmit={handleRegister} className="auth-form">
+          <div className="auth-field">
+            <label>Name</label>
+            <div className="auth-input-wrapper">
+              <FaUser className="auth-input-icon" />
+              <input
+                type="text"
+                placeholder="Your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="auth-input"
+              />
+            </div>
           </div>
-          <div className="input-box">
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <MdOutlineAlternateEmail className="icon" />
+
+          <div className="auth-field">
+            <label>Email</label>
+            <div className="auth-input-wrapper">
+              <MdOutlineAlternateEmail className="auth-input-icon" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="auth-input"
+              />
+            </div>
           </div>
-          <div className="input-box">
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <FaLock className="icon" />
+
+          <div className="auth-field">
+            <label>Password</label>
+            <div className="auth-input-wrapper">
+              <FaLock className="auth-input-icon" />
+              <input
+                type="password"
+                placeholder="Choose a strong password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="auth-input"
+              />
+            </div>
           </div>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="employee">Employee</option>
-            <option value="admin">Admin</option>
-          </select>
-          <button type="submit">Sign Up</button>
-          <div className="register-link">
-            <p>
-              Already have an account? <Link to="/login">Login</Link>
-            </p>
+
+          <div className="auth-field">
+            <label>Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="auth-select"
+            >
+              <option value="employee">Employee</option>
+              <option value="admin">Manager</option>
+            </select>
           </div>
+
+          <button className="auth-button" type="submit" disabled={loading}>
+            {loading ? "Signing up..." : "Sign Up"}
+          </button>
+
+          <p className="auth-footer-text">
+            Already have an account?{" "}
+            <Link to="/login" className="auth-link-strong">
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </div>

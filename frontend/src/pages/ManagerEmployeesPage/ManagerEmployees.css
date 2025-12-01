@@ -1,0 +1,76 @@
+.manager-employees-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  color: #e5e7eb;
+}
+
+.manager-employees-container h2 {
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+/* Card Style */
+.employees-table-card {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+
+/* Table */
+.employees-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.employees-table th,
+.employees-table td {
+  padding: 12px 10px;
+  text-align: left;
+}
+
+.employees-table th {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+.employees-table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* View Button */
+.view-btn {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #38bdf8;
+  transition: 0.2s;
+}
+
+.view-btn:hover {
+  background: #38bdf8;
+  color: #020617;
+}
+
+.edit-btn {
+  color: #fbbf24;
+  border: 1px solid #fbbf24;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.edit-btn:hover {
+  background: #fbbf24;
+  color: #020617;
+}

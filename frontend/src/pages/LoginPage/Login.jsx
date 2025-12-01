@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.css";
 import { FaLock } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
+import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
+      setLoading(true);
       const { data } = await axios.post(
         "http://localhost:5000/api/auth/login",
         { email, password }
@@ -21,45 +23,69 @@ function Login() {
       navigate("/");
     } catch (error) {
       alert("Invalid credentials");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <div className="wrapper">
-        <form onSubmit={handleLogin}>
-          <h2>Login</h2>
-          <div className="input-box">
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <MdOutlineAlternateEmail className="icon" />
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2 className="auth-title">Login</h2>
+        <p className="auth-subtitle">
+          Welcome back! Please enter your details.
+        </p>
+
+        <form onSubmit={handleLogin} className="auth-form">
+          <div className="auth-field">
+            <label>Email</label>
+            <div className="auth-input-wrapper">
+              <MdOutlineAlternateEmail className="auth-input-icon" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="auth-input"
+              />
+            </div>
           </div>
-          <div className="input-box">
-            <input
-              type="password"
-              placeholder="Password"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <FaLock className="icon" />
+
+          <div className="auth-field">
+            <label>Password</label>
+            <div className="auth-input-wrapper">
+              <FaLock className="auth-input-icon" />
+              <input
+                type="password"
+                placeholder="••••••••"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="auth-input"
+              />
+            </div>
           </div>
-          <div className="remember-forgot">
-            <label>
-              <input type="checkbox" />
-              Remember me
+
+          <div className="auth-row">
+            <label className="auth-checkbox">
+              <input type="checkbox" /> Remember me
             </label>
-            <Link to="/forgot-password">Forgot password?</Link>
+            <Link to="/forgot-password" className="auth-link">
+              Forgot password?
+            </Link>
           </div>
-          <button type="submit">Sign In</button>
-          <div className="register-link">
-            <p>
-              Don't have an account? <Link to="/register">Register</Link>
-            </p>
-          </div>
+
+          <button className="auth-button" type="submit" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+
+          <p className="auth-footer-text">
+            Don&apos;t have an account?{" "}
+            <Link to="/register" className="auth-link-strong">
+              Register
+            </Link>
+          </p>
         </form>
       </div>
     </div>

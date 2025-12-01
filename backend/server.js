@@ -1,4 +1,4 @@
-require("dotenv").config({ path: ".env.local" });
+require("dotenv").config({ path: ".env.example" });
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -17,7 +17,12 @@ mongoose
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/attendance", require("./routes/attendance"));
-app.use("/api/admin", require("./routes/admin"));
+app.use("/api/manager", require("./routes/manager"));
+app.use("/api/user", require("./routes/users"));
+app.use("/api/leave", require("./routes/leave"));
+
+app.use("/api/manager/employees", require("./routes/managerEmployees"));
+app.use("/api/manager/daily", require("./routes/managerDaily"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,3 +1,4 @@
+/* Layout container reused across site */
 .container {
   max-width: 1440px;
   width: 100%;
@@ -5,116 +6,154 @@
   padding: 0 2rem;
 }
 
+/* Header bar */
 header {
-  background-color: rgba(0, 28, 121, 0.4);
-  padding: 1.5rem 0;
+  /* Slight gradient, but overall dark */
+   background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(148,163,184,0.6);
+  padding: 1.25rem 0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.7);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
-.menus {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Logo + menu row */
+.menus img {
+  height: 42px;       /* adjust if too big/small */
+  width: auto;
+  display: block;
 }
 
+/* Desktop nav */
 nav ul {
   display: flex;
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 nav ul li {
-  margin: 0 1rem;
+  margin: 0 0.5rem;
   display: flex;
 }
 
+/* All nav links */
 nav ul li a {
   text-decoration: none;
-  color: #fff;
-  font-size: 1rem;
-  padding: 0.5rem 2rem;
-}
-
-nav ul li a.active {
-  background-color: #fff;
-  color: #000;
+  color: #0f172a; 
+  font-size: 0.95rem;
+  padding: 0.5rem 1.6rem;
+  border-radius: 999px;
   font-weight: 500;
-  border-radius: 5px;
+  opacity: 0.9;
+  transition: background 0.25s ease, color 0.25s ease,
+    transform 0.15s ease;
 }
 
+/* Active route */
+nav ul li a.active {
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 999px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
+  opacity: 1;
+}
+
+/* Hover state */
+nav ul li a:hover {
+  background: rgba(148, 163, 184, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Icon + text wrapper */
 .nav-item {
   display: flex;
   align-items: center;
-}
-
-.nav-item:hover {
-  transform: scale(1.1);
-  transition: all 0.3s ease-in-out;
+  gap: 8px;
 }
 
 .nav-icn {
   margin-right: 8px;
   font-size: 18px;
   font-weight: 600;
+  color: inherit;
 }
 
+/* Remove old hover scale from wrapper – link hover handles it */
+.nav-item:hover {
+  transform: none;
+}
+
+/* Burger / close button */
 .btn {
-  color: #fff;
-  font-size: 1.3rem;
+  color: #e5e7eb;
+  font-size: 1.5rem;
   cursor: pointer;
   display: none;
 }
 
+/* Logout button styled like link pill */
 .logout-btn {
   background: transparent;
   border: none;
-  color: #fff;
-  font-size: 16px;
+  color: #0f172a;
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: color 0.3s ease;
+  font-weight: 500;
+  padding: 0.5rem 1.6rem;
+  border-radius: 999px;
+  transition: background 0.25s ease, transform 0.15s ease;
 }
 
 .logout-btn:hover {
-  transform: scale(1.1);
-  transition: all 0.3s ease-in-out;
+  background: rgba(239, 68, 68, 0.12);
+  transform: translateY(-1px);
 }
 
+/* ----------------- MOBILE ------------------ */
 @media (max-width: 768px) {
   .btn {
     display: block;
   }
 
   nav ul {
-    display: flex;
     flex-direction: column;
     position: fixed;
-    width: 300px;
+    width: 260px;
     height: 100vh;
-    top: 5px;
+    top: 0;
     right: -100%;
-    background-color: rgba(0, 28, 121, 0.4);
-    padding: 5rem 0;
-    text-align: center;
-    transition: all 0.5s ease-in;
+    background: #020617;
+    padding: 4.5rem 1.5rem 2rem;
+    text-align: left;
+    transition: right 0.35s ease-in-out;
     z-index: 999;
+    box-shadow: -12px 0 30px rgba(15, 23, 42, 0.9);
   }
 
   nav ul.display {
     right: 0;
-    transition: all 0.9s ease-in-out;
+  }
+
+  nav ul li {
+    margin: 0.4rem 0;
   }
 
   nav ul a {
     display: block;
-    margin: 10px;
+    width: 100%;
   }
 
   .close-btn {
     position: absolute;
-    top: 0.5rem;
-    left: 14rem;
-    margin: 25px;
-    z-index: 1000;
+    top: 1rem;
+    right: 1.3rem;
+    font-size: 1.6rem;
   }
 }

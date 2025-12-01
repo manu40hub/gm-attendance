@@ -1,21 +1,26 @@
 .overview-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 20px;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 20px 16px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
 }
 
 .overview-container h2 {
-  text-align: center;
+  text-align: left;
   font-size: 24px;
   margin-bottom: 20px;
   margin-top: 30px;
+  
 }
 
+/* FILTERS */
 .filter-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 20px;
   gap: 20px;
@@ -26,18 +31,19 @@
   height: 50px;
   background: transparent;
   outline: none;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.7);
   border-radius: 40px;
   font-size: 16px;
-  padding: 0 20px;
+  padding: 0 40px 0 20px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='24' height='24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 20px center;
+  background-position: right 18px center;
   background-size: 15px;
   cursor: pointer;
+  color: #e5e7eb;
 }
 
 .input-select {
@@ -46,23 +52,80 @@
   box-sizing: border-box;
   background: transparent;
   outline: none;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.7);
   border-radius: 40px;
   font-size: 16px;
   padding: 15px 20px 15px 20px;
-  color: #fff;
+  color: #e5e7eb;
 }
 
+/* TODAY CARD */
+.today-card {
+  max-width: 1200px;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.95); /* dark solid background */
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.today-card h2 {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+}
+
+.btn-primary {
+  margin-top: 8px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #ffffff;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.error-text {
+  color: #f97373;
+  font-size: 14px;
+}
+
+/* SUMMARY TABLE CARD */
 .attendance-table {
   max-height: 400px;
   overflow-y: auto;
-  max-width: 1400px;
+  max-width: 1200px;
   width: 100%;
-  border-radius: 8px;
-  padding: 30px 40px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(50px);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 24px 28px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.95); /* no transparency to avoid white bg */
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.8);
+}
+
+.attendance-table table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .attendance-table th,
@@ -72,17 +135,19 @@
   padding: 10px;
   text-align: center;
   border: none;
+  font-size: 14px;
 }
 
 .attendance-table th,
 .attendance-detail-table th {
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.6);
 }
 
+/* TOTAL DAYS (if used anywhere) */
 .total-days-container {
-  background-color: #f2f2f2;
+  background-color: #0f172a;
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .total-days-container h3 {
@@ -99,65 +164,76 @@
   margin-bottom: 5px;
 }
 
+/* DAILY DETAILS CARD */
 .attendance-table-container {
   margin-top: 25px;
-  max-width: 1400px;
+  max-width: 1200px;
   max-height: 380px;
   width: 100%;
-  border-radius: 8px;
-  padding: 30px 40px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(50px);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 24px 28px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.95); /* solid dark */
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.8);
 }
 
 .attendance-detail-table {
-  margin-top: -3%;
-  max-height: 380px;
+  margin-top: 0;
+  max-height: 320px;
   overflow-y: auto;
-  max-width: 1400px;
+  max-width: 100%;
   width: 100%;
-  padding: 30px 40px;
-  backdrop-filter: blur(50px);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  border-collapse: collapse;
 }
 
+/* SCROLLABLE WRAPPER */
 .attendance-table-container .scrollable-table {
   max-height: 320px;
   overflow-y: auto;
 }
 
+/* DARK SCROLLBAR */
 .scrollable-table::-webkit-scrollbar {
   width: 8px;
 }
 
 .scrollable-table::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #020617;
   border-radius: 4px;
 }
 
 .scrollable-table::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #4b5563;
   border-radius: 4px;
 }
 
 .scrollable-table::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #6b7280;
 }
 
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .overview-container {
-    padding: 10px;
+    padding: 10px 12px 24px;
   }
 
   .filter-container {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .filter-container select {
     width: 100%;
     margin: 5px 0;
+  }
+
+  .today-card {
+    padding: 16px 18px;
+  }
+
+  .attendance-table {
+    padding: 18px 16px;
   }
 
   .attendance-table th,
@@ -166,7 +242,105 @@
     padding: 8px;
   }
 
-  .total-days-container {
-    padding: 10px;
+  .attendance-table-container {
+    padding: 18px 16px;
+  }
+}
+
+/* existing styles you already have... */
+
+.overview-top-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* chart card next to summary table */
+.overview-chart-card {
+  border-radius: 12px;
+  padding: 18px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(50px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  min-width: 260px;
+}
+
+.overview-chart-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+@media (max-width: 900px) {
+  .overview-top-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* === LIGHT THEME OVERRIDES FOR OVERVIEW === */
+
+.overview-container {
+  color: #0f172a;
+}
+
+/* glass card for Today + tables */
+.today-card,
+.attendance-table,
+.attendance-table-container,
+.attendance-detail-table,
+.overview-chart-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+  color: #0f172a;
+}
+
+/* keep inner table backgrounds transparent so card color shows */
+.attendance-table,
+.attendance-detail-table {
+  background: transparent;
+}
+
+/* labels & small text */
+.filter-container label {
+  color: #1f2933;
+}
+
+/* select inputs */
+.input-select,
+.filter-container select {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  color: #0f172a;
+}
+
+/* scrollbar more subtle on light bg */
+.scrollable-table::-webkit-scrollbar-track {
+  background: rgba(148, 163, 184, 0.25);
+}
+
+.scrollable-table::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.8);
+}
+
+/* primary button style (Check In / Check Out) */
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+/* responsive tweak so cards don't touch edges on small screens */
+@media (max-width: 768px) {
+  .overview-container {
+    padding: 16px;
   }
 }

@@ -1,9 +1,13 @@
 .app-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  background: transparent !important;   /* Let global gradient show */
 }
 
 .content-wrap {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
