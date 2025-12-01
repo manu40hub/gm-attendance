@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -41,8 +41,8 @@ function ManagerEmployeeAttendance() {
         return;
       }
 
-      const response = await axios.get(
-        `http://localhost:5000/api/manager/attendance/export/${userId}`,
+      const response = await api.get(
+        `/api/manager/attendance/export/${userId}`,
         {
           params: { year, month },
           headers: {
@@ -97,8 +97,8 @@ function ManagerEmployeeAttendance() {
         return;
       }
 
-      await axios.post(
-        "http://localhost:5000/api/manager/attendance/manual",
+      await api.post(
+        "/api/manager/attendance/manual",
         {
           userId,
           date: manualDate,
@@ -137,14 +137,14 @@ function ManagerEmployeeAttendance() {
       setLoading(true);
 
       // Summary
-      const summaryRes = await axios.get(
-        `http://localhost:5000/api/attendance/summary/${userId}`,
+      const summaryRes = await api.get(
+        `/api/attendance/summary/${userId}`,
         { params: { year, month } }
       );
 
       // Daily details
-      const detailsRes = await axios.get(
-        `http://localhost:5000/api/attendance/details/${userId}`,
+      const detailsRes = await api.get(
+        `/api/attendance/details/${userId}`,
         { params: { year, month } }
       );
 
