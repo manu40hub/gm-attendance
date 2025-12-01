@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import "./ManagerDailyAttendance.css";
 import moment from "moment";
 import { jwtDecode } from "jwt-decode";
@@ -20,8 +20,8 @@ function ManagerDailyAttendance() {
       if (decoded.role !== "admin") return navigate("/");
 
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/manager/daily",
+      const { data } = await api.get(
+        "/api/manager/daily",
         {
           params: { date },
           headers: { Authorization: `Bearer ${token}` },
