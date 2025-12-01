@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import "./Leave.css";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -24,7 +24,7 @@ function Leave() {
 
     try {
       setLoading(true);
-      const { data } = await axios.get("http://localhost:5000/api/leave/my", {
+      const { data } = await api.get("/api/leave/my", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setLeaves(data);
@@ -50,8 +50,8 @@ function Leave() {
 
     try {
       setSubmitting(true);
-      await axios.post(
-        "http://localhost:5000/api/leave/apply",
+      await api.post(
+        "/api/leave/apply",
         {
           startDate,
           endDate,
