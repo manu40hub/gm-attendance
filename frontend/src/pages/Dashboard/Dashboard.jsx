@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import moment from "moment";
 import { jwtDecode } from "jwt-decode";
 import "./Dashboard.css";
@@ -22,8 +22,8 @@ function Dashboard() {
   }, []);
 
   const fetchToday = () => {
-    axios
-      .get("http://localhost:5000/api/attendance/today", {
+    api
+      .get("/api/attendance/today", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setToday(res.data.attendance))
@@ -31,8 +31,8 @@ function Dashboard() {
   };
 
   const fetchSummary = () => {
-    axios
-      .get(`http://localhost:5000/api/attendance/summary/${userId}`, {
+    api
+      .get(`/api/attendance/summary/${userId}`, {
         params: { year: thisYear, month: thisMonth },
       })
       .then((res) => {
@@ -43,9 +43,9 @@ function Dashboard() {
 
   const checkIn = () => {
     setActionLoading(true);
-    axios
+    api
       .post(
-        "http://localhost:5000/api/attendance/checkin",
+        "/api/attendance/checkin",
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -60,9 +60,9 @@ function Dashboard() {
 
   const checkOut = () => {
     setActionLoading(true);
-    axios
+    api
       .post(
-        "http://localhost:5000/api/attendance/checkout",
+        "/api/attendance/checkout",
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
