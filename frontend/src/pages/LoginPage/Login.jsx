@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../apiClient";
 import { useNavigate, Link } from "react-router-dom";
 import { FaLock } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import "./Login.css";
-
+api.get("/api/attendance/summary/....");
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,8 +15,8 @@ function Login() {
     event.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        "http://localhost:5000/api/auth/login",
+      const { data } = await api.post(
+        "/api/auth/login",
         { email, password }
       );
       localStorage.setItem("token", data.token);
