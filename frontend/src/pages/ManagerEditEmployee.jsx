@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import "./ManagerEditEmployee.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -25,8 +25,8 @@ function ManagerEditEmployee() {
       const decoded = jwtDecode(token);
       if (decoded.role !== "admin") return navigate("/");
 
-      const { data } = await axios.get(
-        `http://localhost:5000/api/manager/employees`,
+      const { data } = await api.get(
+        `/api/manager/employees`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -59,8 +59,8 @@ function ManagerEditEmployee() {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.put(
-        `http://localhost:5000/api/manager/employee/update/${userId}`,
+      await api.put(
+        `/api/manager/employee/update/${userId}`,
         form,
         {
           headers: { Authorization: `Bearer ${token}` },
