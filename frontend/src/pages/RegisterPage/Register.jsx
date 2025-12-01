@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../apiClient";
+import api from "../../apiClient";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
