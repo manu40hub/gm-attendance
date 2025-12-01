@@ -5,7 +5,31 @@ const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// CORS CONFIG – allow localhost (dev) + vercel (prod)
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://gm-attendance.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error("CORS not allowed for this origin"), false);
+      }
+      return callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+// (optional but safe)
+app.options("*", cors());
+
 
 mongoose
   .connect(process.env.MONGO_URI, {
