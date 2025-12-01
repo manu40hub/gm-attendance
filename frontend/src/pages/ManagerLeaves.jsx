@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import "./ManagerLeaves.css";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -26,8 +26,8 @@ function ManagerLeaves() {
       }
 
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:5000/api/leave/pending",
+      const { data } = await api.get(
+        "/api/leave/pending",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -50,8 +50,8 @@ function ManagerLeaves() {
     if (!window.confirm(`Are you sure to ${action} this leave?`)) return;
 
     try {
-      const url = `http://localhost:5000/api/leave/${id}/${action}`;
-      await axios.put(
+      const url = `/api/leave/${id}/${action}`;
+      await api.put(
         url,
         {},
         {
