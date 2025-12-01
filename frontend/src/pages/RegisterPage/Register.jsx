@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../apiClient";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
@@ -18,7 +18,7 @@ const Register = () => {
 
     try {
       setLoading(true);
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await api.post("/api/auth/register", {
         name,
         email,
         password,
