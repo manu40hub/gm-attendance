@@ -6,27 +6,13 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 // CORS CONFIG – allow localhost (dev) + vercel (prod)
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://gm-attendance.vercel.app",
-];
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like Postman)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        return callback(new Error("CORS not allowed for this origin"), false);
-      }
-      return callback(null, true);
-    },
+    origin: ["http://localhost:10000", "https://gm-attendance.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
   })
 );
-
 // (optional but safe)
 app.options("*", cors());
 
@@ -48,5 +34,5 @@ app.use("/api/leave", require("./routes/leave"));
 app.use("/api/manager/employees", require("./routes/managerEmployees"));
 app.use("/api/manager/daily", require("./routes/managerDaily"));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
